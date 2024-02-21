@@ -1,3 +1,6 @@
 # VLBI_Astrometry_Pipeline
-The project includes the VLBI data reduction pipeline, specially designed for pulsar astrometry, but it can be easily modified/rebuilt for other applications.\
-Feel free to contact Ashish Kalyan (kalyanaastro@gmail.com) for any queries, suggestions, or comments.
+This project contains a VLBI data reduction pipeline specifically designed for pulsar astrometry. However, it can be easily modified or adapted for other applications.\
+
+Authors: Ashish Kalyan and Adam Deller\
+
+Feel free to reach out to Ashish Kalyan at kalyanaastro@gmail.com for any queries, suggestions, or comments.
