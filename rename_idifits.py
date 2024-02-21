@@ -7,8 +7,8 @@ The script renames the idifits file and make their name compatible with the pipe
 "idi_rename" function looks for '_0_'/'_1_' and '_un/gated_'/'_inbeam1/2/3_' keys
 in idifits file name and then rename accordingly and transfer all data files in 
 '<epoch>_data' directory.
-eg. output name: <obscode><epoch><idikey><band>.idifits == BD174A1IBC10.idifits, 
-    where band is equal to 0/1 (generally, it will be zero, except for the dual band observation like BD174.)
+eg. output name: <obscode><epoch><idikey><band>.idifits == bd174a1ibc10.idifits, 
+    where band is equal to 0/1 (generally, it will be zero, except for the dual band observation like bd174.)
 """
 
 import os, shutil, argparse
