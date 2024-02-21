@@ -102,7 +102,7 @@ def vex_sum_download(idifile, obscode, epoch, outputdir, suffix='.vex'):
 
 
 if __name__ == "__main__":
-    yamldir    = os.path.dirname(os.path.abspath(__file__))
+    yamldir    = os.path.dirname(os.path.abspath(__file__)) + "/examples"
     expconfig  = yaml.load(open(yamldir + '/expconfig.yaml'), yaml.SafeLoader)
     epochs     = expconfig['epochs']
     obscode    = expconfig['obscode']
