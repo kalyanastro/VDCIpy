@@ -1,0 +1,9 @@
+opcode = 'FLAG'
+dtimrang = 1  timeoff = 0
+ant_name='KP' bas_name='OV' timerang=151,01,08,45, 151,01,09,10 bif=1 eif=1  sources='' Reason='manual/additional' / 
+ant_name='KP' bas_name='OV' timerang=151,01,14,45, 151,01,15,35 bif=1 eif=1  sources='' Reason='manual/additional' / 
+ant_name='HN' bas_name='LA' timerang=151,02,21,05, 151,02,21,20 bif=3 eif=3  sources='' Reason='manual/additional' /
+ant_name='HN' bas_name='NL' timerang=151,02,20,35, 151,02,21,25 bif=3 eif=3  sources='' Reason='manual/additional' /
+ant_name='HN' bas_name='FD' timerang=151,01,12,10, 151,01,13,10 bif=1 eif=1  sources='' Reason='manual/additional' /
+ant_name='LA' bas_name='PT' timerang=151,01,03,55, 151,01,04,45 bif=1 eif=1  sources='' Reason='manual/additional' /
+ant_name='LA' bas_name='PT' timerang=151,01,06,45, 151,01,07,40 bif=1 eif=1  sources='' Reason='manual/additional' /
