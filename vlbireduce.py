@@ -41,7 +41,7 @@ parser.add_argument('source_cal', metavar='', help='Source Calibration Method (m
                             )
 args   = parser.parse_args()
 
-yamldir    = os.path.dirname(os.path.abspath(__file__))
+yamldir    = os.path.dirname(os.path.abspath(__file__)) + "/examples"
 expconfig  = yaml.load(open(yamldir + '/expconfig.yaml'), yaml.SafeLoader)
 epochs     = expconfig['epochs']
 obscode    = expconfig['obscode']
