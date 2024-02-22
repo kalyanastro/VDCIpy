@@ -256,7 +256,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     pmparfile  = args.pmparfile
-    yamldir    = os.path.dirname(os.path.abspath(__file__)) + "/examples"
+    yamldir    = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/examples"
     expconfig  = yaml.load(open(yamldir + '/' + 'expconfig.yaml'), yaml.SafeLoader)
     obscode    = expconfig['obscode'].upper()
     projectdir = expconfig['projectdir']
