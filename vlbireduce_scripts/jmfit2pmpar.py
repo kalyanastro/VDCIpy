@@ -240,7 +240,7 @@ if __name__ == "__main__":
     parser.add_argument('-i',  '--ibckey',    metavar='', help='ibckey, ibc1/2/3')
     args = parser.parse_args()
 
-    yamldir   = os.path.dirname(os.path.abspath(__file__)) + "/examples"
+    yamldir   = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/examples"
     expconfig = yaml.load(open(yamldir + '/expconfig.yaml'), yaml.SafeLoader)
     obscode   = expconfig['obscode']
     epochs    = expconfig['epochs']
