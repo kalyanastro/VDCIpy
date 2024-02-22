@@ -17,7 +17,7 @@ import vlbi_calibration_support as vcs
 import astro_utils as ast
 
 
-yamldir = os.path.dirname(os.path.abspath(__file__)) + "/examples"
+yamldir = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/examples"
 expconfig  = yaml.load(open(yamldir + '/expconfig.yaml'), yaml.SafeLoader)
 aipsver = expconfig['aipsver']
 print("You are using AIPS version: ", aipsver)
