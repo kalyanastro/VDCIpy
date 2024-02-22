@@ -1,6 +1,6 @@
 #!/usr/bin/ParselTongue
 """
-Hao Ding
+Hao Ding, Ashish Kalyan
 
 Writes image stats to a file which will be stored in the image file directory
 """
@@ -16,7 +16,7 @@ if not len(sys.argv) == 3 and not len(sys.argv) == 4:
     print(usage)
     sys.exit()
 
-yamldir     = os.path.dirname(os.path.abspath(__file__))
+yamldir     = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/examples"
 expconfig   = yaml.load(open(yamldir + '/expconfig.yaml'), yaml.SafeLoader)
 AIPS.userno = expconfig['userno']
 aipsver     = expconfig['aipsver']
