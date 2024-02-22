@@ -1,10 +1,11 @@
 # NOTE: All keys should be in lower letters, except the source name and aipsver
-# projectdir contains the data and other supportive files
+# projectdir contains the data and other supportive files folders
 # band, keep it zero, introduced to differentiate dual frequency observation like in BD174
 # splitifs will trigger the splat task, and bif to eif will be split and will create a new aips uvdata
-# inverse_referencing for pulsar (inverse_referencing)
-# model_divided_fits_for_pmpar, if True, then model-divided data will be used for the final position 
-# determination (required only in case of inverse phase referencing)
+# inverse_referencing for pulsar (if inverse_referencing: True)
+# model_divided_fits_for_pmpar: True, required only in the case of inverse referencing, the IBC 
+# model-divided data will be used for the final position determination 
+
 
 
 aipsver: '31DEC23'
@@ -14,7 +15,7 @@ obscode: bd152
 band: 0         # suffix of idifilename BD152C4IBC1"0".idifits
 
 # epochs: ['ci', 'ia', 'ib', 'ic', 'id', 'ie', 'if', 'ig']
-epochs: ['ci', 'ia', 'ib', 'ic', 'id', 'ie', 'if', 'ig']
+epochs: ['ci']
 refant: 5
 # shift: [J1142+1547, 0.014433429459451376, -0.010000115935326903]   # [source, rashift, decshift]
 skipsnedt: False  # if true, skip the snediting
@@ -30,11 +31,11 @@ pixsize: 0.75
 mapsize: 1024 #4096
 
 
-# put the calibrators' model file and AIPS name here
-# ffcmodelon: ciffc2
-# ffcmodelfile: /home/kalyan/Desktop/adam/bd152_old_tecor/J1136/ci/source_models/ciibc10_J1153+8058_model/ciibc10_J1153+8058_difmap.fits
-ffcmodelon: gmffc2
-ffcmodelfile: /home/kalyan/Desktop/adam/bd152_old_tecor/J1136/globalmodels/gblibc10_J1215+3448/gblibc10_J1215+3448_difmap.fits
+# put the calibrators' model file and AIPS outname here
+ffcmodelon: ciffc2
+ffcmodelfile: /home/kalyan/Desktop/adam/bd152_old_tecor/J1136/ci/source_models/ciibc10_J1153+8058_model/ciibc10_J1153+8058_difmap.fits
+# ffcmodelon: gmffc2
+# ffcmodelfile: /home/kalyan/Desktop/adam/bd152_old_tecor/J1136/globalmodels/gblibc10_J1215+3448/gblibc10_J1215+3448_difmap.fits
 
 prcmodelon: gmprc2
 prcmodelfile: /home/kalyan/Desktop/adam/bd152_old_tecor/J1136/globalmodels/gblibc10_J1142+1547/gblibc10_J1142+1547_difmap.fits
@@ -58,8 +59,8 @@ primaryinbeam: IBC-5-0060
 model_divided_fits_for_pmpar: False  # if you want to use model divided data to determine the absolute position
 
 target: J1136+1551
-# ffc: J1153+8058  # ci
-ffc: J1215+3448
+ffc: J1153+8058  # ci
+# ffc: J1215+3448
 prc: J1142+1547
 ibcs: [IBC-5-0079, IBC-5-0061, IBC-5-0060]  # ibcs: [ibc1, ibc2, ibc3]
 
