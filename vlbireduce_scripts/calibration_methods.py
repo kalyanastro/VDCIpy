@@ -40,6 +40,7 @@ def open_logger(epoch, idikey, expconfig):
 def aips2disk(uvdata, source, epochdir, catclass='split'):
     """
     split and store AIPSCat to disk
+    return: output fits file
     """
     splitdata = AIPSUVData(source, catclass, 1, 1)
     vct.split_uvdata(uvdata, [source], 0, catclass, 1)
@@ -57,6 +58,7 @@ def aips2disk(uvdata, source, epochdir, catclass='split'):
             os.mkdir(srcmodelfolder)
         vct.fittp(splitdata, fitsdataout)
         vct.delAIPSCat(splitdata)
+    return fitsdataout
     
 
 def snedt(uvdata, snver):
@@ -932,7 +934,9 @@ class srccal(calMethods):
                 self.pulsar_selfcal(targetmodel)
             vct.delAIPSCat(targetmodel)
         else:
-            aips2disk(uvdata, expconfig['target'], epochdir, 'split')
+            # self.apply_scintillation_correction()
+            uvfile = aips2disk(uvdata, expconfig['target'], epochdir, 'split')
+            vct.difmap_maptarget(uvfile, pixsize=expconfig['pixsize'], dogaussian=True, mapsize=expconfig['mapsize'])
 
 #end================================
 ##
