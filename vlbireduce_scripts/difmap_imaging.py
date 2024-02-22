@@ -9,7 +9,7 @@ from argparse import RawTextHelpFormatter
 import vlbi_calibration_tasks as vct
 
 
-yamldir    = os.path.dirname(os.path.abspath(__file__))
+yamldir    = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/examples"
 expconfig  = yaml.load(open(yamldir + '/expconfig.yaml'), yaml.SafeLoader)
 epochs     = expconfig['epochs']
 obscode    = expconfig['obscode']
