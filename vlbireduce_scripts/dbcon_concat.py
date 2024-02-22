@@ -3,7 +3,7 @@
 """
 Ashish Kalyan & Adam Deller
 
-This script is build on top of dbcon function (Hao's psrpivlbireduce script). 
+This script is build on top of the dbcon function. 
 Ashish faced an issue while dbconing 29 file, "obit error: Too many open files". 
 To resolve it, this script is written, it does the same job but concatenate in chunks.
 
@@ -25,7 +25,7 @@ import yaml, os, argparse, sys
 from argparse import RawTextHelpFormatter
 
 
-yamldir     = os.path.dirname(os.path.abspath(__file__)) + "/examples"
+yamldir     = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/examples"
 expconfig   = yaml.load(open(yamldir + '/expconfig.yaml'), yaml.SafeLoader)
 aipsver     = expconfig['aipsver']
 AIPS.userno = expconfig['userno']
