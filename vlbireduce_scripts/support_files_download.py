@@ -4,7 +4,8 @@
 Ashish Kalyan
 
 It downloads the ionex (igsg only), EOPS, .vex and .sum files for a given observation.
-It takes inputs (epochs, obscode, projectdir, band) from the expconfig file so do the needful changes over there.
+It takes inputs (epochs, obscode, projectdir, band) from the expconfig file 
+so do the needful changes over there.
 """
 
 import os, yaml, glob, requests, datetime, wget
@@ -102,7 +103,7 @@ def vex_sum_download(idifile, obscode, epoch, outputdir, suffix='.vex'):
 
 
 if __name__ == "__main__":
-    yamldir    = os.path.dirname(os.path.abspath(__file__)) + "/examples"
+    yamldir    = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/examples"
     expconfig  = yaml.load(open(yamldir + '/expconfig.yaml'), yaml.SafeLoader)
     epochs     = expconfig['epochs']
     obscode    = expconfig['obscode']
