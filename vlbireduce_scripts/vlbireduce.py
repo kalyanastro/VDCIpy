@@ -3,22 +3,23 @@
 """
 Ashish Kalyan
 
-The "vlbireduce.py" is the principal compiler of the pipeline and has separate utility for a 
-		a source calibration. Here is details of all the routes
+The "vlbireduce.py" is the principal compiler of the pipeline and has a separate utility for the 
+        source calibration. Here are details of all the routes
 
-        1) FFC, calibrates the fringe finder calibrator, and running it over all epoch you can
-		   make a global model (by concatenating all epochs' calibrated data). Use dbcon_concat.py,
+        1) FFC, calibrates the fringe finder calibrator, and running it over all epochs, you can
+           make a global model (by concatenating all epochs' calibrated data). Use dbcon_concat.py,
            to concatenate uvdata
-		2) PRC, calibrates the phase reference calibrator, and running over all epochs you can make a 
-		   global model of PRC
-		3) IPR (Inverse Phase referencing), calibrates the target source by utlizing the solutions
-		   of calibrators (obtained with first two steps)
-		4) SELFCAL_IBC1/2/3, self-calibrate the inbeam calibrator (IBC1/2/3).
+        2) PRC, calibrates the phase reference calibrator and runs over all epochs, you can make a 
+           global model of PRC
+        3) IPR (Inverse Phase referencing) calibrates the target source by utilizing the solutions
+           of calibrators (obtained with the first two steps), and if a model of the target is supplied, then it
+           determines the phase self-calibration on the target
+        4) SELFCAL_IBC1/2/3, self-calibrate the inbeam calibrator (IBC1/2/3).
         5) IBC1TOIBC2/3, apply IBC1 solutions to the IBC2/3
-		6) IPR2IBC1/2/3, apply the inverse phase referencing solutions to the IBC1/2/3,
-		
-		NOTE: First, make a global model for all the calibrators, using the required methods mentioned 
-			  above, and then do the target calibration.
+        6) IPR2IBC1/2/3, apply the inverse phase referencing solutions to the IBC1/2/3,
+        
+        NOTE: First, make a global model for all the calibrators using the required methods mentioned 
+              above, and then do the target calibration.
 """
 
 import AIPS
