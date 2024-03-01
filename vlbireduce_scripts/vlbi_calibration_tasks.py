@@ -1528,7 +1528,7 @@ def wizCorrectScint(parentuvdata, examplesnversion, outputsnversion, splituvdata
     print("VLBI PIPE: wizCorrectScint: Pulsar scintillation correction is done")
 
 
-def imagejmfit(modelfile, file_dir, psrmodel, pixwindow=20):
+def imagejmfit(modelfile, psrmodel, pixwindow=50):
     """
     JMFIT: Gaussian fitting to image plane to determine the source parameters
     First, it load image to AIPS
