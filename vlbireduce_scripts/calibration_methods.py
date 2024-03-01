@@ -212,10 +212,13 @@ class calMethods:
         if not os.path.exists(accorsn):
             vct.accor(uvdata, expconfig['accorsolmins'])
             snver += 1
-            vct.snsmo(uvdata, refant, snver, 'BOTH', timemins=20, ampdev=0.03, phasedev=0, 
+            # vct.snplt(uvdata, tabledir + '/accor0.ps', 'SN', snver, 'AMP')
+
+            vct.snsmo(uvdata, refant, snver, 'BOTH', timemins=20, ampdev=expconfig['accorampdev'], phasedev=0, 
                         delaydev=0, passthrough=1, ratesmoothmin=0, ratedev=0)
             snver += 1
             vct.snplt(uvdata, tabledir + '/accor.ps', 'SN', snver, 'AMP')
+
             if not expconfig['skipsnedt']:
                 print("VLBI PIPE: Examine ACCOR SN table (amplitude) and flag the outliers")
                 snver = snedt(uvdata, snver)
@@ -231,7 +234,9 @@ class calMethods:
         if not os.path.exists(apcalsn):
             vct.apcal(uvdata)
             snver += 1
-            vct.snsmo(uvdata, refant, snver, 'BOTH', timemins=20, ampdev=1.5, phasedev=0, 
+            # vct.snplt(uvdata, tabledir + '/apcal0.ps', 'SN', snver, 'AMP')
+
+            vct.snsmo(uvdata, refant, snver, 'BOTH', timemins=20, ampdev=expconfig['apcalampdev'], phasedev=0, 
                         delaydev=0, passthrough=1, ratesmoothmin=0, ratedev=0)
             snver += 1
             vct.snplt(uvdata, tabledir + '/apcal.ps', 'SN', snver, 'AMP')
@@ -399,9 +404,7 @@ class calMethods:
         vct.snsmo(uvdata, refant, snver, smotype='DELA', timemins=20, ampdev=0, phasedev=0, delaydev=10, 
                                 passthrough=0, ratesmoothmin=0, ratedev=0)
         snver += 1
-        
         vct.snplt(uvdata, tabledir + '/ffc.fring.ps', 'SN', snver, 'DELA')
-
         if not expconfig['skipsnedt']:
             print("VLBI PIPE: Examine FFC FRING SN table (zeroing rate, delay) and flag the outliers")
             snver = snedt(uvdata, snver)
@@ -427,6 +430,8 @@ class calMethods:
         vct.fring_fitting(uvdata, refant, prcmodel, [expconfig['prc']], 1, 0, solint=3, dostokesi=0, 
                           snr=5, delaywin=400,ratewin=30,inttimesecs=2)
         snver += 1
+        # vct.snplt(uvdata, tabledir + '/prc.fring0.ps', 'SN', snver, 'DELA')
+
         vct.snsmo(uvdata, refant, snver, 'VLRI', timemins=20, ampdev=0, phasedev=0, delaydev=10, 
                   passthrough=0, ratesmoothmin=3, ratedev=10)
         snver += 1
@@ -459,10 +464,14 @@ class calMethods:
         # phase self-calibration
         prccalibdata = AIPSUVData(expconfig['prc'], 'calib', 1,1)
         vct.splittoseq(uvdata, [expconfig['prc']], gainuse, 'calib', prccalibdata.seq)
-        prccalibdata.table('NX', 1).zap()
+        vct.deletetable(prccalibdata, 'NX', 1)
+        # prccalibdata.table('NX', 1).zap()
 
         vct.calib_selfcal(prccalibdata, prcmodel, refant, [expconfig['prc']], solint=1.5, dostokesi=0, 
                                   doamp=0, avgif=0, calibrate=0, snr=5, weightit=0, normalize=0)
+        
+        # vct.snplt(prccalibdata, tabledir + '/prc.calib.p0.ps', 'SN', 1, 'PHAS')
+
         vct.snsmo(prccalibdata, refant, invers=1, smotype='AMP', timemins=300, ampdev=0.2, phasedev=0,
                    delaydev=0, passthrough=0, ratesmoothmin=0, ratedev=0)
 
@@ -484,10 +493,14 @@ class calMethods:
 
         # amplitude and phase self-calibration
         vct.splittoseq(uvdata, [expconfig['prc']], gainuse, 'calib', prccalibdata.seq)
-        prccalibdata.table('NX', 1).zap()
+        vct.deletetable(prccalibdata, 'NX', 1)
+        # prccalibdata.table('NX', 1).zap()
 
         vct.calib_selfcal(prccalibdata, prcmodel, refant, [expconfig['prc']], solint=20, dostokesi=0, 
                                   doamp=1, avgif=0, calibrate=0, snr=6, weightit=0, normalize=0)
+        
+        # vct.snplt(prccalibdata, tabledir + '/prc.calib.ap0.ps', 'SN', 1, 'AMP')
+        
         vct.snsmo(prccalibdata, refant, invers=1, smotype='AMP', timemins=300, ampdev=0.2, phasedev=0,
                    delaydev=0, passthrough=0, ratesmoothmin=0, ratedev=0)
 
@@ -524,7 +537,8 @@ class calMethods:
         
         splitibcdata = AIPSUVData(pribc, 'temp', 1, 1)
         vct.splittoseq(uvdata, [pribc], gainuse, 'temp', splitibcdata.seq)
-        splitibcdata.table('NX', 1).zap()
+        vct.deletetable(splitibcdata, 'NX', 1)
+        # splitibcdata.table('NX', 1).zap()
 
         # Normalize split data by dividing model
         uvsubibcdata = AIPSUVData(pribc, 'uvsub', 1, 1)
@@ -535,9 +549,13 @@ class calMethods:
         vct.calib_selfcal(uvsubibcdata, ibcmodel, refant, [pribc], solint=2, dostokesi=1, 
                                   doamp=0, avgif=1, calibrate=0, snr=5, weightit=0, normalize=0)
         
+        # vct.snplt(uvsubibcdata, tabledir + f"/{srckey}.calib.p10.ps", 'SN', 1, 'PHAS')
+
         # phase self-calibration by averaging only Stokes 
         vct.calib_selfcal(uvsubibcdata, ibcmodel, refant, [pribc], solint=20, dostokesi=1, 
                                   doamp=0, avgif=0, calibrate=0, snr=5, weightit=0, normalize=0)
+        
+        # vct.snplt(uvsubibcdata, tabledir + f"/{srckey}.calib.p10.ps", 'SN', 2, 'PHAS')
         
         # Copy phase self-cal SN tables to caldata and apply the solutions
         vct.tacop(uvsubibcdata, uvdata, 'SN', inver=1)
@@ -572,7 +590,8 @@ class calMethods:
         # amplitude-and-phase self-calibration
         ibc1apcalibdata = AIPSUVData(pribc, 'calib', 1, 1)
         vct.splittoseq(uvdata, [pribc], gainuse, 'calib', ibc1apcalibdata.seq)
-        ibc1apcalibdata.table('NX', 1).zap()
+        vct.deletetable(ibc1apcalibdata, 'NX', 1)
+        # ibc1apcalibdata.table('NX', 1).zap()
 
         vct.calib_selfcal(ibc1apcalibdata, ibcmodel, refant, [pribc], solint=10, dostokesi=1,
                         doamp=1, avgif=0, calibrate=0, snr=7, weightit=0, normalize=0) 
@@ -609,7 +628,8 @@ class calMethods:
 
         splituvdata = AIPSUVData(target, 'scint', 1,1)
         vct.splittoseq(uvdata, [target], gainuse, 'scint', splituvdata.seq)
-        splituvdata.table('NX', 1).zap()
+        vct.deletetable(splituvdata, 'NX', 1)
+        # splituvdata.table('NX', 1).zap()
 
         outputfile = tabledir + '/' + uvdata.name + '_' + target + '_ScintCorr.txt'
         vct.wizCorrectScint(uvdata, 1, snver+1, splituvdata, expconfig['scntsolmins'], outputfile)
@@ -639,7 +659,8 @@ class calMethods:
     
         psrcalibdata = AIPSUVData(source, 'calib', 1, 1)
         vct.splittoseq(uvdata, [source], gainuse, 'calib', psrcalibdata.seq)
-        psrcalibdata.table('NX', 1).zap()
+        vct.deletetable(psrcalibdata, 'NX', 1)
+        # psrcalibdata.table('NX', 1).zap()
         
         # phase self-calibration by averaging Stokes and IFs
         vct.calib_selfcal(psrcalibdata, srcmodel, refant, [source], solint=2, dostokesi=1, 
@@ -661,7 +682,8 @@ class calMethods:
         vct.delAIPSCat(psrcalibdata)
 
         vct.splittoseq(uvdata, [source], gainuse, 'calib', psrcalibdata.seq)
-        psrcalibdata.table('NX', 1).zap()
+        vct.deletetable(psrcalibdata, 'NX', 1)
+        # psrcalibdata.table('NX', 1).zap()
 
         # phase self-calibration by averaging only Stokes 
         vct.calib_selfcal(psrcalibdata, srcmodel, refant, [source], solint=20, dostokesi=1, 
@@ -721,9 +743,6 @@ class srccal(calMethods):
 
         if ffcmodel.name == '':
             aips2disk(uvdata, expconfig['ffc'], self.epochdir, 'split')
-
-        # if expconfig['save_calibrated_data']:
-        #     aips2disk(uvdata, expconfig['ffc'], self.epochdir, 'split')
 
         # outputfile = tabledir + '/' + uvdata.name + '_FFC_CL' + str(gainuse) + '_bp_possm.ps'
         # vct.possm(uvdata, outputfile, 1, gainuse, 1, [expconfig['ffc']], nplot=2)
