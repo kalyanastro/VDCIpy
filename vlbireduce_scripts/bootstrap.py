@@ -100,6 +100,7 @@ def get_1sigma_confidence(a, numbins, valname, binvals=[], docolour=True, fullfi
     bootstraplinecolour = 'k'
     leastsquareslinestyle = 'solid'
     leastsquareslinecolour = 'silver'
+    font_size = 16
     if docolour:
         modelinestyle = 'solid'
         modelinecolour = 'r'
@@ -116,11 +117,11 @@ def get_1sigma_confidence(a, numbins, valname, binvals=[], docolour=True, fullfi
     #pyplot.ylabel("Probability density")
     if valname == "parallax":
         # pyplot.xlabel("Parallax (mas)")
-        pyplot.xlabel("Parallax [mas]", fontsize=16) # Ashish added fontsize
+        pyplot.xlabel("Parallax [mas]", fontsize=font_size) # Ashish added fontsize
     elif valname == "pm_ra":
-        pyplot.xlabel("Proper motion (R.A., [mas/yr])", fontsize=16)
+        pyplot.xlabel("Proper motion (R.A., [mas/yr])", fontsize=font_size)
     elif valname == "pm_dec":
-        pyplot.xlabel("Proper motion (Decl., [mas/yr])", fontsize=16)
+        pyplot.xlabel("Proper motion (Decl., [mas/yr])", fontsize=font_size)
     if len(fullfitvals) > 0:
         tempmu = float(fullfitvals[2])
         tempsigma = float(fullfitvals[4])
@@ -156,11 +157,11 @@ def get_1sigma_confidence(a, numbins, valname, binvals=[], docolour=True, fullfi
     #pyplot.ylabel("Probability density")
     if valname == "parallax":
         # pyplot.xlabel("Parallax (mas)")
-        pyplot.xlabel("Parallax [mas]", fontsize=16) # Ashish added fontsize
+        pyplot.xlabel("Parallax [mas]", fontsize=font_size) # Ashish added fontsize
     elif valname == "pm_ra":
-        pyplot.xlabel("Proper motion (R.A., [mas/yr])", fontsize=16)
+        pyplot.xlabel("Proper motion (R.A., [mas/yr])", fontsize=font_size)
     elif valname == "pm_dec":
-        pyplot.xlabel("Proper motion (Decl., [mas/yr])", fontsize=16)
+        pyplot.xlabel("Proper motion (Decl., [mas/yr])", fontsize=font_size)
     if len(fullfitvals) > 0:
         tempmu = float(fullfitvals[2])
         tempsigma = float(fullfitvals[4])
@@ -670,7 +671,10 @@ if docolour:
 errorlinecolour ='k'
 if docolour:
     errorlinecolour = 'r'
-measurementlinestyle = 'ko'
+
+# measurementlinestyle = 'ko'
+measurementlinestyle = 'o' # Ashish updated it
+
 if docolour:
     measurementlinestyle = 'ko'
 pyplot.clf()
@@ -729,17 +733,17 @@ for  i in range(todo):
     tras += ((ref_ra_hour[i]*math.pi/12 - meanrarad)*180*3.6e6*math.cos(meandecrad))/math.pi
     tdecs += (ref_dec_deg[i] - meandecrad*180/math.pi)*3.6e6
     pyplot.figure(1)
-    fitline = pyplot.plot(ttimes,tras,fitlinestyle,alpha=alphaval)
+    fitline = pyplot.plot(ttimes,tras,fitlinestyle, color='mediumblue',alpha=alphaval)
     pyplot.figure(2)
-    fitline = pyplot.plot(ttimes,tdecs,fitlinestyle,alpha=alphaval)
+    fitline = pyplot.plot(ttimes,tdecs,fitlinestyle, color='mediumblue',alpha=alphaval)
     maxrapx.append(max(tras))
     maxdecpx.append(max(tdecs))
     #fitpoints = pyplot.plot(etimes,pras,fitpointsstyle, markersize=fitpointmarkersize)
 # Plot with a label once for the legend
 pyplot.figure(1)
-junk = pyplot.plot([],[],bothfitstyle,markersize=fitpointmarkersize,label="Astrometric fits")
+junk = pyplot.plot([],[],bothfitstyle,markersize=fitpointmarkersize, color='mediumblue', label="Astrometric fits")
 pyplot.figure(2)
-junk = pyplot.plot([],[],bothfitstyle,markersize=fitpointmarkersize,label="Astrometric fits")
+junk = pyplot.plot([],[],bothfitstyle,markersize=fitpointmarkersize, color='mediumblue', label="Astrometric fits")
 
 # Now the actual measurements
 tempout = open(junkfile, 'w')
@@ -772,13 +776,13 @@ ylimdec = float(int(5*ylimdec+1))/5.0
 
 pyplot.figure(1)
 pyplot.ylim(-ylimra, ylimra)
-measurementline = pyplot.errorbar(etimes, eras, yerr=eraerr, fmt=measurementlinestyle, markersize=3, capsize=3, markeredgewidth=1.5, label="Measured positions")
+measurementline = pyplot.errorbar(etimes, eras, yerr=eraerr, fmt=measurementlinestyle, color='#27ae60',markersize=3, capsize=3, markeredgewidth=1.5, label="Measured positions")
 pyplot.legend(numpoints=1, loc=legendlocation)
 pyplot.tight_layout()
 pyplot.savefig(plotfile1)
 pyplot.figure(2)
 pyplot.ylim(-ylimdec, ylimdec)
-measurementline = pyplot.errorbar(etimes, edecs, yerr=edecerr, fmt=measurementlinestyle, markersize=3, capsize=3, markeredgewidth=1.5, label="Measured positions")
+measurementline = pyplot.errorbar(etimes, edecs, yerr=edecerr, fmt=measurementlinestyle, color='#27ae60',markersize=3, capsize=3, markeredgewidth=1.5, label="Measured positions")
 pyplot.legend(numpoints=1, loc=legendlocation)
 pyplot.tight_layout()
 pyplot.savefig(plotfile2)
