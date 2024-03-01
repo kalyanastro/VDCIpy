@@ -5,13 +5,17 @@ Ashish Kalyan and Adam Deller
 import math, sys
 import numpy as np
 from astropy.time import Time
-from astropy.constants import c
+from astropy.constants import c, pc
+from astropy import units as u
 
 light_speed = c.value
+parsec = pc.value
 
 
-# used to make the log file
 class Logger:
+    """
+    used to make the log file
+    """
     def __init__(self, logfile):
         self.terminal = sys.stdout
         self.logfile = logfile
@@ -23,6 +27,10 @@ class Logger:
         self.logfile.flush()
     def isatty(self):
         return False
+
+
+def mas2rad(x):
+    return x * (1e-3) * (1 / 3600) * (np.pi / 180)
 
 
 def radec_format_conversion(ra, dec):
@@ -192,7 +200,7 @@ def resol_pixelsize(freq, baseline):
     Computes the resolution of synthesis array and pixel size
     https://science.nrao.edu/facilities/vlba/docs/manuals/oss/ang-res
     Input: frequency [GHz], baseline [km]
-    Return: resolution (mas), pixel size (mas)
+    Return: resolution [mas], pixel size [mas]
     """
 
     waveln = 100*(light_speed/(freq*1e9))   # cm
@@ -208,11 +216,11 @@ def resol_pixelsize(freq, baseline):
 def data_rate(ifs, bw, npol, nbit_sampling, t_acc):
     """
     Input: IFS: number of IFs, 
-           BW: bandwidth of observation (MHz)
+           BW: bandwidth of observation [MHz]
            NPOL: Number of polarization
            NBIT_SAMPLING: n-bit sampling
-           T_ACC: integration time
-    Return: data rate (Mega samples per second), product of all the inputs
+           T_ACC: integration time [s]
+    Return: data rate [Mbps], product of all the inputs
     """
     return ifs * bw * npol * nbit_sampling * t_acc
 
@@ -241,24 +249,20 @@ def parallax2dist(parallax, upper_error, lower_error):
     loerror = distance - lower_distance
     return distance, uperror, loerror
 
-
-def mas2rad(x):
-    return x * (1e-3) * (1 / 3600) * (np.pi / 180)
-
 def transverse_velocity(pm_alpha, pm_delta, distance):
     """
-    Determine the transverse valocity from the proper motion
+    Determine the transverse valocity from the proper motion and distance
+    pm_alpha/delta [mas/yr]
+    distance [pc]
+    return: transverse velocity [km/s]
     """
-    from astropy.constants import pc
-    from astropy import units as u
-    pc_val = pc.value
-    seconds = 1 * u.year.to(u.s)
+    yrtosec = 1 * u.year.to(u.s)
 
     proper_motion = np.sqrt(pm_alpha**2 + pm_delta**2)
     mu_rad = mas2rad(proper_motion)       # [radians/yr]
 
     # Compute transverse velocity
-    v_t = (mu_rad * distance * pc_val / 1000) / seconds  # [km/s]
+    v_t = (mu_rad * distance * parsec / 1000) / yrtosec  # [km/s]
     return v_t
 
 #end=============================
