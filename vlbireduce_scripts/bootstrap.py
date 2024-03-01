@@ -180,7 +180,7 @@ def get_1sigma_confidence(a, numbins, valname, binvals=[], docolour=True, fullfi
     pyplot.axvline(smoothedmode, color=modelinecolour, linestyle=modelinestyle)
     pyplot.axvline(sorteda[bestindex], color=confidencelinecolour, linestyle=confidencelinestyle)
     pyplot.axvline(sorteda[bestindex+offset], color=confidencelinecolour, linestyle=confidencelinestyle)
-    pyplot.tight_layout() # Ashish added it
+    pyplot.tight_layout()  # Ashish added it
     pyplot.savefig('smoothedbootstrap_%s.pdf' % (valname))
     bracket = (sorteda[bestindex], sorteda[bestindex+offset], smoothedmode)
     return bracket
