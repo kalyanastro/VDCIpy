@@ -2,8 +2,7 @@
 # Adam Deller
 
 
-import os, sys, re, subprocess, math
-import numpy
+import os, sys, re, subprocess, math, numpy
 from optparse import OptionParser
 
 ## GLOBAL VARIABLES #####################################
