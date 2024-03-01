@@ -2,10 +2,11 @@
 Ashish Kalyan, Hao Ding, and Adam Deller
 """
 
-import math, sys, re
+import math, sys, re, os
 import numpy as np
 from astropy.io import fits
 from astropy.coordinates import SkyCoord
+from astropy import units as u
 import astro_utils as ast
 
 
@@ -495,6 +496,7 @@ def position_offset_due2_proper_motion(modelvexfile, vexfile1, psrpi_file, sourc
     epoch1, decimal_year1, mjd_obs1 = obsyear(vexfile1)
 
     t = (float(mjd_obs1) - float(mjd_obs0)) / 365.25  # [years]
+    # t = (float(mjd_obs1) - float(mjd_obs0)) / 365  # [years]
     rashift  = mas2deg(float(pmra)) * t
     decshift = mas2deg(float(pmdec)) * t
     return rashift, decshift
@@ -621,6 +623,19 @@ def pmpart_reader(pmpart):
     return ttimes, tras, tdecs
 
 
+def run_pmpar(pmparfile, subtractpm=False):
+    """
+    Run pmpar with and without proper motion removal
+    """
+    pmparsplit = pmparfile.split('/')
+    os.chdir(os.path.dirname(pmparfile))
+    if subtractpm:
+        os.system("pmpar " + pmparsplit[-1] + " -om")
+    else:
+        # os.system("pmpar " + pmparsplit[-1] + " -c > " + pmparsplit[-1].replace(".in", ".full.out"))
+        os.system("pmpar " + pmparsplit[-1] + " > " + pmparsplit[-1].replace(".in", ".out"))
+
+
 def replace_word_in_file(file_name, old_word, new_word):
     """
     Replace a given word of a text file with the new word
@@ -670,6 +685,63 @@ def pmparin_copy_updated_ra_dec_columns(source_file, dest_file, new_ra_entries, 
             f.write(line)
         for line in updated_data:
             f.write(line + '\n')
+
+
+def joint_astrometric_fit(pmparin_joint, pmparin1, pmparin2):
+    """
+    It make a joint pmpar file from two pmpar files by adjusting the reference position offset
+    it will store the resultant output in the joint_fit directory.
+    joint.pmpar file will have two data section: top will be pmparin1 section and
+    bottom will be pmparin2 section 
+    """
+
+    print("pmparin1: ", pmparin1)
+    
+    pmparoutf1 = pmparin1.replace("pmpar.in", "pmpar.out")
+    pmparoutf2 = pmparin2.replace("pmpar.in", "pmpar.out")
+    if not os.path.exists(pmparoutf1):
+        run_pmpar(pmparin1)
+    if not os.path.exists(pmparoutf2):
+        run_pmpar(pmparin2)
+    
+    pmparout1 = pmparout_reader(pmparoutf1)
+    pmparout2 = pmparout_reader(pmparoutf2)
+    print("MJD: ", pmparout1[-1])
+    if not pmparout1[-1] == pmparout2[-1]:
+        print("Both pmpar.in should have same ref epoch")
+        sys.exit()
+    coord1 = ast.radec_format_conversion(pmparout1[0], pmparout1[2])
+    coord2 = ast.radec_format_conversion(pmparout2[0], pmparout2[2])
+    s1 = SkyCoord(coord1[0], coord1[1], frame='icrs')
+    s2 = SkyCoord(coord2[0], coord2[1], frame='icrs')
+    print("Reference positions difference [mas]: ", round(s1.separation(s2).to(u.arcsec).value*1000, 4))
+
+    # Calculate the RA and DEC differences
+    ra_diff  = (s1.ra.deg - s2.ra.deg)    #deg
+    dec_diff = (s1.dec.deg - s2.dec.deg)  #deg
+    decimalyear, ras, raerrs, decs, decerrs, epochs, mjd = pmparin_reader(pmparin1)
+    ra_update, dec_update = [],[]
+    for i in range(len(ras)):
+        radeg, decdeg = ast.radec2deg(ras[i], decs[i])
+        ra_update.append(radeg - ra_diff)
+        dec_update.append(decdeg - dec_diff)
+    pmparin_copy_updated_ra_dec_columns(pmparin1, pmparin_joint, ra_update, dec_update)
+
+    # append pmparin2 to the joint.pmpar file
+    f1 = open(pmparin_joint, 'a')
+    f2 = open(pmparin2)
+    lines = f2.readlines()
+    f2.close()
+    atline = 0
+    while '# Source' not in lines[atline]:
+        atline += 1
+    atline +=1
+    for i in range(atline, len(lines)):
+        if i==atline:
+            f1.write('\n' + lines[i])
+        else: f1.write(lines[i])
+    f1.close()
+    return pmparin_joint
 
 
 def timestring2min(timestringlist):
